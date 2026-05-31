@@ -43,6 +43,7 @@
         d: false,
         q: false,
         e: false,
+        shift: false,
 
         get vector() {},
       }
@@ -75,12 +76,14 @@
       scene.background = skybox
 
       // Rendering
-      const speed = 3
+      const normal_speed = 3
+      const sprint_speed = 6
 
       function animate(time) {
         timer.update(time)
         const dt = timer.getDelta()
 
+        const speed = input.shift ? sprint_speed : normal_speed
         const move = speed * dt
 
         if (input.w) camera.translateZ(-move)
