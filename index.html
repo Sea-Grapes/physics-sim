@@ -10,33 +10,36 @@
   <body>
     <script type="module">
       import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.184.0/+esm'
-      import cameraControls from 'https://cdn.jsdelivr.net/npm/camera-controls@3.1.2/+esm'
+      import CameraControls from 'https://cdn.jsdelivr.net/npm/camera-controls@3.1.2/+esm'
+
+      // Init
       window.THREE = THREE
-
-      const scene = new THREE.Scene()
-      const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight)
-
+      const v3 = (x = 0, y = x, z = x) => new THREE.Vector3(x, y, z)
       const canvas = document.querySelector('canvas')
       const renderer = new THREE.WebGLRenderer({ canvas })
       renderer.setClearColor('#ffffff')
+      const scene = new THREE.Scene()
 
+      const timer = new THREE.Timer()
+      timer.connect(document)
+
+      CameraControls.install({ THREE })
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        innerWidth / innerHeight,
+        1,
+        200,
+      )
+      const controls = new CameraControls(camera, canvas)
+      controls.setTarget(0, 0, 0)
+      const startPos = v3(5, 4, 5).normalize().multiplyScalar(1)
+      controls.setLookAt(startPos.x, startPos.y + 3, startPos.z, 0, 3, 0)
+
+      // Scene setup
       const geometry = new THREE.BoxGeometry(1, 1, 1)
       const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
       const cube = new THREE.Mesh(geometry, material)
       scene.add(cube)
-
-      camera.position.z = 5
-
-      function animate(time) {
-        renderer.render(scene, camera)
-      }
-      renderer.setAnimationLoop(animate)
-
-      new ResizeObserver(() => {
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
-        camera.aspect = canvas.clientWidth / canvas.clientHeight
-        camera.updateProjectionMatrix()
-      }).observe(canvas)
 
       const cubeloader = new THREE.CubeTextureLoader().setPath('img/skybox/')
       const skybox = cubeloader.load([
@@ -47,8 +50,22 @@
         'front.bmp', // pz
         'back.bmp', // nz
       ])
-
       scene.background = skybox
+
+      // Rendering
+      function animate(time) {
+        timer.update(time)
+        const dt = timer.getDelta()
+        controls.update(dt)
+        renderer.render(scene, camera)
+      }
+      renderer.setAnimationLoop(animate)
+
+      new ResizeObserver(() => {
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
+        camera.aspect = canvas.clientWidth / canvas.clientHeight
+        camera.updateProjectionMatrix()
+      }).observe(canvas)
     </script>
   </body>
 </html>
