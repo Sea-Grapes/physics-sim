@@ -19,7 +19,7 @@
   class="fixed top-4 right-4 min-h-10 bg-gray-900/60 rounded-sm text-white p-2 backdrop-blur-md space-y-1"
 >
   <summary>Controls</summary>
-  <section id="basic-test">
+  <section id="basic-test" class="space-y-1">
     <h1
       class="text-xs text-center bg-gray-900/50 -mx-2 p-1 font-bold uppercase font-mono"
     >
@@ -160,6 +160,8 @@
   ])
   scene.background = skybox
 
+  scene.add(new THREE.GridHelper(50, 20, '#eee', '#abc'))
+
   // Loop
   const data = new Array(7).fill(0)
 
@@ -169,6 +171,11 @@
       data[i] = parseFloat(input.value)
       console.log(data)
     })
+  })
+
+  data.reset = document.querySelector('#basic-test #reset')
+  data.reset.addEventListener('click', (e) => {
+    data.fill(0)
   })
 
   const normal_speed = 3
@@ -193,7 +200,7 @@
     for (let i = data.length - 1; i > 0; i--) {
       data[i - 1] += data[i] * dt
     }
-    data[0] = data[0] % 100
+    data[0] = data[0] % 20
     // console.log(data)
 
     data.inputs.forEach((input, i) => {
@@ -201,6 +208,8 @@
         input.value = data[i].toFixed(2)
       }
     })
+
+    cube.position.y = data[0]
 
     renderer.render(scene, camera)
   }
