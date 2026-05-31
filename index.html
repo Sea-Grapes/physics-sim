@@ -164,9 +164,11 @@
 
   // Loop
   const data = new Array(7).fill(0)
+  data[0] = 0.5
 
   data.inputs = Array.from(document.querySelectorAll('#basic-test input'))
   data.inputs.forEach((input, i) => {
+    input.value = data[i].toFixed(2)
     input.addEventListener('change', (e) => {
       data[i] = parseFloat(input.value)
       console.log(data)
@@ -178,8 +180,8 @@
     data.fill(0)
   })
 
-  const normal_speed = 3
-  const sprint_speed = 6
+  const normal_speed = 5
+  const sprint_speed = 10
 
   function animate(time) {
     timer.update(time)
