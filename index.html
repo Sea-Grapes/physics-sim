@@ -9,8 +9,7 @@
   <canvas class="w-screen h-screen"></canvas>
   <body>
     <script type="module">
-      import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.184.0/+esm'
-      import CameraControls from 'https://cdn.jsdelivr.net/npm/camera-controls@3.1.2/+esm'
+      import * as THREE from 'https://esm.sh/three'
 
       // Init
       window.THREE = THREE
@@ -23,17 +22,12 @@
       const timer = new THREE.Timer()
       timer.connect(document)
 
-      CameraControls.install({ THREE })
       const camera = new THREE.PerspectiveCamera(
         75,
         innerWidth / innerHeight,
         1,
         200,
       )
-      const controls = new CameraControls(camera, canvas)
-      controls.setTarget(0, 0, 0)
-      const startPos = v3(5, 4, 5).normalize().multiplyScalar(1)
-      controls.setLookAt(startPos.x, startPos.y + 3, startPos.z, 0, 3, 0)
 
       // Scene setup
       const geometry = new THREE.BoxGeometry(1, 1, 1)
@@ -56,7 +50,6 @@
       function animate(time) {
         timer.update(time)
         const dt = timer.getDelta()
-        controls.update(dt)
         renderer.render(scene, camera)
       }
       renderer.setAnimationLoop(animate)
