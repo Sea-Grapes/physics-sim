@@ -92,6 +92,9 @@
         if (input.a) camera.translateX(-move)
         if (input.d) camera.translateX(move)
 
+        if (input.q) camera.translateY(-move)
+        if (input.e) camera.translateY(move)
+
         renderer.render(scene, camera)
       }
       renderer.setAnimationLoop(animate)
