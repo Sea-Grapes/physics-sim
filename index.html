@@ -175,6 +175,7 @@
   data.inputs.forEach((input, i) => {
     input.value = data[i].toFixed(2)
     input.addEventListener('change', (e) => {
+      input.value = parseFloat(input.value).toFixed(2)
       data[i] = parseFloat(input.value)
       console.log(data)
     })
@@ -187,6 +188,11 @@
 
   const normal_speed = 5
   const sprint_speed = 10
+
+  const clamp_range = {
+    max: 20,
+    min: 0,
+  }
 
   function animate(time) {
     timer.update(time)
@@ -207,7 +213,9 @@
     for (let i = data.length - 1; i > 0; i--) {
       data[i - 1] += data[i] * dt
     }
-    data[0] = data[0] % 20
+    // data[0] = data[0] % 20
+    if (data[0] < clamp_range.min) data[0] = clamp_range.max
+    else if (data[0] > clamp_range.max) data[0] = clamp_range.min
     // console.log(data)
 
     data.inputs.forEach((input, i) => {
