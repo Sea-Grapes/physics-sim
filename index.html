@@ -10,6 +10,7 @@
   <body>
     <script type="module">
       import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.184.0/+esm'
+      import cameraControls from 'https://cdn.jsdelivr.net/npm/camera-controls@3.1.2/+esm'
       window.THREE = THREE
 
       const scene = new THREE.Scene()
@@ -36,6 +37,18 @@
         camera.aspect = canvas.clientWidth / canvas.clientHeight
         camera.updateProjectionMatrix()
       }).observe(canvas)
+
+      const cubeloader = new THREE.CubeTextureLoader().setPath('img/skybox/')
+      const skybox = cubeloader.load([
+        'right.bmp', // px
+        'left.bmp', // nx
+        'top.bmp', // py
+        'bottom.bmp', // ny
+        'front.bmp', // pz
+        'back.bmp', // nz
+      ])
+
+      scene.background = skybox
     </script>
   </body>
 </html>

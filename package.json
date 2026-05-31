@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "dev": "serve v2.html"
+    "dev": "serve"
   }
 }
