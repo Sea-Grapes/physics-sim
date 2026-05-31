@@ -10,6 +10,7 @@
   <body>
     <script type="module">
       import * as THREE from 'https://esm.sh/three'
+      import { PointerLockControls } from 'https://esm.sh/three/examples/jsm/controls/PointerLockControls.js'
 
       // Init
       window.THREE = THREE
@@ -25,9 +26,18 @@
       const camera = new THREE.PerspectiveCamera(
         75,
         innerWidth / innerHeight,
-        1,
+        0.1,
         200,
       )
+      const controls = new PointerLockControls(camera, canvas)
+
+      canvas.addEventListener('mousedown', (e) => {
+        controls.lock()
+      })
+
+      canvas.addEventListener('mouseup', (e) => {
+        controls.unlock()
+      })
 
       // Scene setup
       const geometry = new THREE.BoxGeometry(1, 1, 1)
