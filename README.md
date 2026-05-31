@@ -11,3 +11,5 @@ pnpm i serve
 
 serve
 ```
+
+Using threejs and tailwindcss libraries.
