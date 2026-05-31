@@ -19,7 +19,6 @@
       const renderer = new THREE.WebGLRenderer({ canvas })
       renderer.setClearColor('#ffffff')
       const scene = new THREE.Scene()
-
       const timer = new THREE.Timer()
       timer.connect(document)
 
@@ -30,13 +29,32 @@
         200,
       )
       const controls = new PointerLockControls(camera, canvas)
-
       canvas.addEventListener('mousedown', (e) => {
         controls.lock()
       })
-
       canvas.addEventListener('mouseup', (e) => {
         controls.unlock()
+      })
+
+      const input = {
+        w: false,
+        a: false,
+        s: false,
+        d: false,
+        q: false,
+        e: false,
+
+        get vector() {},
+      }
+
+      addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase()
+        if (key in input) input[key] = true
+      })
+
+      addEventListener('keyup', (e) => {
+        const key = e.key.toLowerCase()
+        if (key in input) input[key] = false
       })
 
       // Scene setup
@@ -57,9 +75,20 @@
       scene.background = skybox
 
       // Rendering
+      const speed = 3
+
       function animate(time) {
         timer.update(time)
         const dt = timer.getDelta()
+
+        const move = speed * dt
+
+        if (input.w) camera.translateZ(-move)
+        if (input.s) camera.translateZ(move)
+
+        if (input.a) camera.translateX(-move)
+        if (input.d) camera.translateX(move)
+
         renderer.render(scene, camera)
       }
       renderer.setAnimationLoop(animate)
