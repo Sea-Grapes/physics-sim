@@ -14,6 +14,29 @@
     <span class="font-medium">Physics Sim</span> v1.0
   </h1> -->
 
+<style>
+  kbd {
+    position: relative;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 0px 1px rgba(0, 0, 0, 0.2);
+    color: #333;
+    display: inline-block;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 5px;
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  kbd:hover {
+    top: 1px;
+    box-shadow: 0 1px 0 0.5px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
 <details
   open
   class="fixed top-4 right-4 min-h-10 bg-gray-900/60 rounded-sm text-white p-2 backdrop-blur-md space-y-1"
@@ -87,8 +110,46 @@
     >
       Reset All
     </button>
+    <button
+      command="show-modal"
+      commandfor="basic-test-explanation"
+      class="text-sky-300 underline"
+    >
+      Guide
+    </button>
   </section>
 </details>
+
+<dialog
+  id="basic-test-explanation"
+  class="fixed max-w-[50ch] space-y-1 left-1/2 top-1/2 -translate-1/2 p-4 rounded-md backdrop:bg-black/30 starting:opacity-0 backdrop:starting:opacity-0 backdrop:transition-opacity transition-opacity duration-300"
+>
+  <h1 class="font-medium">Guide</h1>
+  <p>
+    Use the <kbd>wasd</kbd> and <kbd>qe</kbd> keys to move around. Right click
+    and drag to look around the scene (both right and left click work).
+  </p>
+  <p>
+    The basic test contains number inputs for position, velocity, acceleration,
+    jerk, and so on. These are the
+    <a
+      href="https://en.wikipedia.org/wiki/Fourth,_fifth,_and_sixth_derivatives_of_position"
+      rel="noopener noreferrer"
+      class="text-sky-600 underline"
+      >higher-order derivatives of position</a
+    >
+    in physics. Try setting these to different values to see how they affect the
+    movement.
+  </p>
+  <button
+    commandfor="basic-test-explanation"
+    command="close"
+    class="px-3 py-1.5 mt-2 cursor-pointer inset-ring inset-ring-gray-300 text-sm font-semibold shadow-xs rounded-md hover:bg-gray-50 float-right"
+  >
+    Close
+  </button>
+</dialog>
+
 <canvas class="fixed inset-0 w-full h-full -z-1"></canvas>
 <script type="module">
   import * as THREE from 'https://esm.sh/three'
@@ -134,6 +195,7 @@
   }
 
   addEventListener('keydown', (e) => {
+    if (!controls.isLocked) return
     const key = e.key.toLowerCase()
     if (key in input) input[key] = true
   })
@@ -253,4 +315,6 @@
     camera.aspect = canvas.clientWidth / canvas.clientHeight
     camera.updateProjectionMatrix()
   }).observe(canvas)
+
+  console.log('Hi')
 </script>
