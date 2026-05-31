@@ -6,6 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Physics Sim</title>
   </head>
+  <canvas class="w-screen h-screen"></canvas>
   <body>
     <script type="module">
       import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.184.0/+esm'
@@ -14,10 +15,9 @@
       const scene = new THREE.Scene()
       const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight)
 
-      const renderer = new THREE.WebGLRenderer()
-      renderer.setSize(innerWidth, innerHeight)
+      const canvas = document.querySelector('canvas')
+      const renderer = new THREE.WebGLRenderer({ canvas })
       renderer.setClearColor('#ffffff')
-      document.body.appendChild(renderer.domElement)
 
       const geometry = new THREE.BoxGeometry(1, 1, 1)
       const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
@@ -30,6 +30,12 @@
         renderer.render(scene, camera)
       }
       renderer.setAnimationLoop(animate)
+
+      new ResizeObserver(() => {
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
+        camera.aspect = canvas.clientWidth / canvas.clientHeight
+        camera.updateProjectionMatrix()
+      }).observe(canvas)
     </script>
   </body>
 </html>
