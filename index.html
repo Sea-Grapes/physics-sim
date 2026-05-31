@@ -144,10 +144,10 @@
   })
 
   // Scene setup
-  const geometry = new THREE.BoxGeometry(1, 1, 1)
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-  const cube = new THREE.Mesh(geometry, material)
-  scene.add(cube)
+  const geometry = new THREE.SphereGeometry(1)
+  const material = new THREE.MeshMatcapMaterial()
+  const object = new THREE.Mesh(geometry, material)
+  scene.add(object)
 
   const cubeloader = new THREE.CubeTextureLoader().setPath('img/skybox/')
   const skybox = cubeloader.load([
@@ -160,11 +160,12 @@
   ])
   scene.background = skybox
 
-  scene.add(new THREE.GridHelper(50, 20, '#eee', '#abc'))
+  const grid = new THREE.GridHelper(50, 20, '#eee', '#abc')
+  grid.position.y = -0.5
+  scene.add(grid)
 
   // Loop
   const data = new Array(7).fill(0)
-  data[0] = 0.5
 
   data.inputs = Array.from(document.querySelectorAll('#basic-test input'))
   data.inputs.forEach((input, i) => {
@@ -211,7 +212,7 @@
       }
     })
 
-    cube.position.y = data[0]
+    object.position.y = data[0]
 
     renderer.render(scene, camera)
   }
