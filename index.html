@@ -168,6 +168,18 @@
   grid.position.y = -0.5
   scene.add(grid)
 
+  const arrow = new THREE.ArrowHelper(
+    v3(0, 1, 0),
+    v3(0, 0, 0),
+    20, // arrow length
+    '#fff',
+    0.3, // arrowhead width
+    0.15, // arrowhead length
+  )
+  // arrow.position.x = -3
+  // arrow.position.y = -0.5
+  scene.add(arrow)
+
   // Loop
   const data = new Array(7).fill(0)
 
