@@ -6,109 +6,179 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Physics Sim</title>
   </head>
-  <!-- <h1
-    class="bg-gray-900 inline-block text-white px-2 py-1 pr-2.5 pb-1.5 rounded-br-md"
+</html>
+
+<!-- <h1
+    class="bg-gray-900 inline-block text-white px-2 py-1 pr-2.5 pb-1.5 rounded-br-md text-sm"
   >
     <span class="font-medium">Physics Sim</span> v1.0
   </h1> -->
-  <canvas class="fixed inset-0 w-full h-full -z-1"></canvas>
-  <body>
-    <script type="module">
-      import * as THREE from 'https://esm.sh/three'
-      import { PointerLockControls } from 'https://esm.sh/three/examples/jsm/controls/PointerLockControls.js'
 
-      // Init
-      window.THREE = THREE
-      const v3 = (x = 0, y = x, z = x) => new THREE.Vector3(x, y, z)
-      const canvas = document.querySelector('canvas')
-      const renderer = new THREE.WebGLRenderer({ canvas })
-      renderer.setClearColor('#ffffff')
-      const scene = new THREE.Scene()
-      const timer = new THREE.Timer()
-      timer.connect(document)
+<details
+  open
+  class="fixed top-4 right-4 min-h-10 bg-gray-900/60 rounded-sm text-white p-2 backdrop-blur-md space-y-1"
+>
+  <summary>Controls</summary>
+  <h1
+    class="text-xs text-center bg-gray-900/50 -mx-2 p-1 font-bold uppercase font-mono"
+  >
+    Basic Test (y direction)
+  </h1>
+  <label class="flex justify-between"
+    >Position
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+  <label class="flex justify-between"
+    >Velocity
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+  <label class="flex justify-between"
+    >Acceleration
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+  <label class="flex justify-between"
+    >Jerk
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+  <label class="flex justify-between"
+    >Snap
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+  <label class="flex justify-between"
+    >Crackle
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+  <label class="flex justify-between"
+    >Pop
+    <input
+      class="ms-2 bg-gray-900/70 px-2 rounded-sm w-[10ch] box-content"
+      type="number"
+      value="0"
+    />
+  </label>
+</details>
+<canvas class="fixed inset-0 w-full h-full -z-1"></canvas>
+<script type="module">
+  import * as THREE from 'https://esm.sh/three'
+  import { PointerLockControls } from 'https://esm.sh/three/examples/jsm/controls/PointerLockControls.js'
 
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        innerWidth / innerHeight,
-        0.1,
-        200,
-      )
-      const controls = new PointerLockControls(camera, canvas)
-      canvas.addEventListener('mousedown', (e) => {
-        controls.lock()
-      })
-      canvas.addEventListener('mouseup', (e) => {
-        controls.unlock()
-      })
+  // Init
+  window.THREE = THREE
+  const v3 = (x = 0, y = x, z = x) => new THREE.Vector3(x, y, z)
+  const canvas = document.querySelector('canvas')
+  const renderer = new THREE.WebGLRenderer({ canvas })
+  renderer.setClearColor('#ffffff')
+  const scene = new THREE.Scene()
+  const timer = new THREE.Timer()
+  timer.connect(document)
 
-      const input = {
-        w: false,
-        a: false,
-        s: false,
-        d: false,
-        q: false,
-        e: false,
-        shift: false,
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    innerWidth / innerHeight,
+    0.1,
+    200,
+  )
+  window.camera = camera
+  camera.position.set(4, 2, 4)
+  camera.lookAt(0, 1, 0)
+  const controls = new PointerLockControls(camera, canvas)
+  canvas.addEventListener('mousedown', (e) => {
+    controls.lock()
+  })
+  canvas.addEventListener('mouseup', (e) => {
+    controls.unlock()
+  })
 
-        get vector() {},
-      }
+  const input = {
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    q: false,
+    e: false,
+    shift: false,
 
-      addEventListener('keydown', (e) => {
-        const key = e.key.toLowerCase()
-        if (key in input) input[key] = true
-      })
+    get vector() {},
+  }
 
-      addEventListener('keyup', (e) => {
-        const key = e.key.toLowerCase()
-        if (key in input) input[key] = false
-      })
+  addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase()
+    if (key in input) input[key] = true
+  })
 
-      // Scene setup
-      const geometry = new THREE.BoxGeometry(1, 1, 1)
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-      const cube = new THREE.Mesh(geometry, material)
-      scene.add(cube)
+  addEventListener('keyup', (e) => {
+    const key = e.key.toLowerCase()
+    if (key in input) input[key] = false
+  })
 
-      const cubeloader = new THREE.CubeTextureLoader().setPath('img/skybox/')
-      const skybox = cubeloader.load([
-        'right.bmp', // px
-        'left.bmp', // nx
-        'top.bmp', // py
-        'bottom.bmp', // ny
-        'front.bmp', // pz
-        'back.bmp', // nz
-      ])
-      scene.background = skybox
+  // Scene setup
+  const geometry = new THREE.BoxGeometry(1, 1, 1)
+  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+  const cube = new THREE.Mesh(geometry, material)
+  scene.add(cube)
 
-      // Rendering
-      const normal_speed = 3
-      const sprint_speed = 6
+  const cubeloader = new THREE.CubeTextureLoader().setPath('img/skybox/')
+  const skybox = cubeloader.load([
+    'right.bmp', // px
+    'left.bmp', // nx
+    'top.bmp', // py
+    'bottom.bmp', // ny
+    'front.bmp', // pz
+    'back.bmp', // nz
+  ])
+  scene.background = skybox
 
-      function animate(time) {
-        timer.update(time)
-        const dt = timer.getDelta()
+  // Loop
+  const normal_speed = 3
+  const sprint_speed = 6
 
-        const speed = input.shift ? sprint_speed : normal_speed
-        const move = speed * dt
+  function animate(time) {
+    timer.update(time)
+    const dt = timer.getDelta()
 
-        if (input.w) camera.translateZ(-move)
-        if (input.s) camera.translateZ(move)
+    const speed = input.shift ? sprint_speed : normal_speed
+    const move = speed * dt
 
-        if (input.a) camera.translateX(-move)
-        if (input.d) camera.translateX(move)
+    if (input.w) camera.translateZ(-move)
+    if (input.s) camera.translateZ(move)
 
-        if (input.q) camera.translateY(-move)
-        if (input.e) camera.translateY(move)
+    if (input.a) camera.translateX(-move)
+    if (input.d) camera.translateX(move)
 
-        renderer.render(scene, camera)
-      }
-      renderer.setAnimationLoop(animate)
+    if (input.q) camera.translateY(-move)
+    if (input.e) camera.translateY(move)
 
-      new ResizeObserver(() => {
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
-        camera.aspect = canvas.clientWidth / canvas.clientHeight
-        camera.updateProjectionMatrix()
-      }).observe(canvas)
-    </script>
-  </body>
-</html>
+    renderer.render(scene, camera)
+  }
+  renderer.setAnimationLoop(animate)
+
+  new ResizeObserver(() => {
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
+    camera.aspect = canvas.clientWidth / canvas.clientHeight
+    camera.updateProjectionMatrix()
+  }).observe(canvas)
+</script>
