@@ -168,17 +168,25 @@
   grid.position.y = -0.5
   scene.add(grid)
 
-  const arrow = new THREE.ArrowHelper(
-    v3(0, 1, 0),
-    v3(0, 0, 0),
-    20, // arrow length
-    '#fff',
-    0.3, // arrowhead width
-    0.15, // arrowhead length
-  )
-  // arrow.position.x = -3
-  // arrow.position.y = -0.5
-  scene.add(arrow)
+  function numberLine() {
+    const group = new THREE.Group()
+    group.position.x = -3
+    group.position.y = -0.5
+
+    const arrow = new THREE.ArrowHelper(
+      v3(0, 1, 0),
+      v3(0, 0, 0),
+      20, // arrow length
+      '#fff',
+      0.3, // arrowhead width
+      0.15, // arrowhead length
+    )
+    group.add(arrow)
+
+    scene.add(group)
+  }
+
+  numberLine()
 
   // Loop
   const data = new Array(7).fill(0)
@@ -189,7 +197,6 @@
     input.addEventListener('change', (e) => {
       input.value = parseFloat(input.value).toFixed(2)
       data[i] = parseFloat(input.value)
-      console.log(data)
     })
   })
 
@@ -228,7 +235,6 @@
     // data[0] = data[0] % 20
     if (data[0] < clamp_range.min) data[0] = clamp_range.max
     else if (data[0] > clamp_range.max) data[0] = clamp_range.min
-    // console.log(data)
 
     data.inputs.forEach((input, i) => {
       if (document.activeElement !== input && input.value != data[i]) {
