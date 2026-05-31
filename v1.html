@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics Sim</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+</html>
+
+<canvas class="w-screen h-screen"></canvas>
+<h1 class="fixed top-4 left-4">Physics Sim</h1>
+
+<div class="fixed top-4 right-4">
+  <h2>Controls</h2>
+</div>
+
+<script>
+  const canvas = document.querySelector('canvas')
+  const ctx = canvas.getContext('2d')
+
+  let data = [0, 0, 0, 0, 0, 0]
+  window.data = data
+
+  function tick() {
+    ctx.resetTransform()
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    ctx.translate(canvas.width / 2, canvas.height / 2)
+
+    ctx.fillStyle = 'red'
+
+    for (let i = data.length - 1; i > 0; i--) {
+      data[i - 1] += data[i]
+    }
+
+    if (Math.abs(data[0]) > (canvas.height + 10) / 2) {
+      data.fill(0)
+      // data[0] = 0
+    }
+    //console.log(data)
+
+    ctx.beginPath()
+    ctx.arc(0, data[0], 10, 0, Math.PI * 2)
+    ctx.fill()
+
+    // setTimeout(() => {
+    // }, 50)
+    requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+
+  new ResizeObserver(() => {
+    canvas.width = canvas.clientWidth * devicePixelRatio
+    canvas.height = canvas.clientHeight * devicePixelRatio
+  }).observe(canvas)
+</script>
